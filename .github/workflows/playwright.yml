@@ -1,0 +1,41 @@
+name: Playwright Cloud Run
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ main ]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+      PIXABAY_QUERY: ${{ vars.PIXABAY_QUERY }}
+      CANVA_EMAIL: ${{ secrets.CANVA_EMAIL }}
+      CANVA_PASSWORD: ${{ secrets.CANVA_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps
+
+      - name: Run script
+        run: python script.py
+
+      - name: Upload artifacts (screenshots, logs, etc.)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: run-artifacts
+          path: |
+            artifacts/**
+            assets/**
