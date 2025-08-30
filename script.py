@@ -90,7 +90,7 @@ def upload_to_canva(image_path: pathlib.Path) -> None:
 
 def main():
     # 1) Download a Pixabay image
-    api_key = os.environ.get("52038665-f99e5546c4c0dc2ca3e7ec117")
+    api_key = os.environ.get("PIXABAY_API_KEY")
     query = os.environ.get("PIXABAY_QUERY", "sunset")
     if not api_key:
         print("PIXABAY_API_KEY not set. Exiting.")
@@ -115,4 +115,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
